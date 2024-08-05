@@ -23,6 +23,6 @@ public class WebConfig implements WebMvcConfigurer {
             }
         };
     }
-} ```
+}
 
 Ejemplo visible [aquí](https://github.com/juancruzmarzetti/backend-integrador/blob/master/src/main/java/com/me/odontologo/configuration/WebConfig.java)
