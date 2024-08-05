@@ -3,14 +3,15 @@ import Card from './components/Card'
 import { useContextGlobal } from './utils/global.context';
 
 function App() {
-
-  const {state} = useContextGlobal();
+  const { state } = useContextGlobal();
 
   const renderCards = () => {
     const cards = [];
-    state.forEach(element => {
-      productosCards.push(<Card key={element.id} odontologo={element} />);
-    });
+    if (Array.isArray(state)) {
+      state.forEach(element => {
+        cards.push(<Card key={element.id} odontologo={element} />);
+      });
+    }
     return cards;
   }
 
