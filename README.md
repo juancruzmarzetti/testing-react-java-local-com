@@ -1,8 +1,28 @@
-# React + Vite
+# Explicación
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+El proyecto de Java funciona localmente en el puerto 8080, o en el puerto en el que configuremos que se levante (configuración que se le indica a un programa Java desde application.properties o application.yml), y el proyecto React corre en el puerto 5173. El programa Java por defecto no acepta requests HTTP de otras URL, por lo tanto hay que agregar una clase de configuración, en el directorio donde por ejemplo estan los demás directorios (controllers, service, repository, etc.), en ese mismo directorio creamos un directorio llamado "configuration" y en ese directorio configuration creamos una clase llamada "WebConfig", y tendría que verse de la siguiente manera:
 
-Currently, two official plugins are available:
+```package com.me.odontologo.configuration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+@Configuration
+public class WebConfig implements WebMvcConfigurer {
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("http://localhost:5173")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
+                        .allowedHeaders("*")
+                        .allowCredentials(true);
+            }
+        };
+    }
+} ```
+
+Ejemplo visible [aquí](https://github.com/juancruzmarzetti/backend-integrador/blob/master/src/main/java/com/me/odontologo/configuration/WebConfig.java)
