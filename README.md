@@ -28,3 +28,38 @@ public class WebConfig implements WebMvcConfigurer {
 ```
 
 Ejemplo visible [aquí](https://github.com/juancruzmarzetti/backend-integrador/blob/master/src/main/java/com/me/odontologo/configuration/WebConfig.java)
+
+---
+
+··· English
+
+# Explanation
+
+The Java project runs locally on port 8080, or on the port configured to start (this configuration is specified to a Java program via application.properties or application.yml), and the React project runs on port 5173. By default, the Java program does not accept HTTP requests from other URLs, so we need to add a configuration class. In the directory where the other directories (controllers, service, repository, etc.) are located, create a directory called "configuration" and within that directory create a class named "WebConfig", which should look as follows:
+
+```java
+package com.me.odontologo.configuration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+@Configuration
+public class WebConfig implements WebMvcConfigurer {
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("http://localhost:5173")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
+                        .allowedHeaders("*")
+                        .allowCredentials(true);
+            }
+        };
+    }
+}
+```
+
+Visible example [here](https://github.com/juancruzmarzetti/backend-integrador/blob/master/src/main/java/com/me/odontologo/configuration/WebConfig.java)
